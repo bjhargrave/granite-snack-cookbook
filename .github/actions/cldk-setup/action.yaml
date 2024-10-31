@@ -1,0 +1,14 @@
+name: 'Additional Test Setup for CLDK'
+description: 'Additional setup steps to perform during test setup for CLDK'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 11
+    - name: Setup Ollama
+      run: |
+        echo "Installing Ollama"
+      shell: bash

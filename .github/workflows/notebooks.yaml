@@ -35,6 +35,7 @@ permissions:
 
 jobs:
   vanilla:
+    #uses: bjhargrave/granite-cookbook-utils/.github/workflows/test_notebook.yaml@shared-workflow
     uses: ./.github/workflows/test_notebook.yaml
     secrets: inherit
     with:
@@ -43,9 +44,10 @@ jobs:
       python-versions: >-
         3.10
         3.11
+      action: '.github/actions/cldk-setup'
 
   pdl:
-    uses: ./.github/workflows/test_notebook.yaml
+    uses: bjhargrave/granite-cookbook-utils/.github/workflows/test_notebook.yaml@shared-workflow
     secrets: inherit
     with:
       notebook-lists: |

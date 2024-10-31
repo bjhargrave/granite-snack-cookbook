@@ -46,6 +46,11 @@ on:
         required: false
         type: boolean
         default: ${{ contains(fromJSON('["schedule","workflow_dispatch"]'), github.event_name) }}
+      action:
+        description: 'Path to a folder with a composite action containing additional test setup'
+        required: false
+        type: string
+        default: ''
 
 env:
   LC_ALL: en_US.UTF-8
@@ -106,6 +111,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Prepare Additional Test Setup action
+        if: ${{ inputs.action && hashFiles(format('{0}/action.yml',inputs.action),format('{0}/action.yaml',inputs.action)) }}
+        run: |
+          mkdir -p .github/tmp/actions/test-setup
+          echo '*' > .github/tmp/.gitignore
+          cp -Rpv "${{ inputs.action }}"/* .github/tmp/actions/test-setup
+
+      - name: Additional Test Setup
+        if: ${{ hashFiles('.github/tmp/actions/test-setup/action.yml','.github/tmp/actions/test-setup/action.yaml') }}
+        uses: ./.github/tmp/actions/test-setup
+        with:
+          python: ${{ matrix.python }}
+          notebook: ${{ matrix.notebook }}
 
       - name: Setup Python ${{ matrix.python }}
         uses: actions/setup-python@v5
