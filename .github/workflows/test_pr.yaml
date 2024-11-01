@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: Test a Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Pull Request number to test'
+        required: true
+        type: number
+
+env:
+  LC_ALL: en_US.UTF-8
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  vanilla:
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    uses: bjhargrave/granite-cookbook-utils/.github/workflows/test_notebook.yaml@pr-support
+    #uses: ibm-granite-community/utils/.github/workflows/test_notebook.yaml@main
+    secrets: inherit
+    with:
+      notebook-lists: |
+        .github/notebook_lists/vanilla_notebooks.txt
+      python-versions: >-
+        3.10
+        3.11
+      pr: ${{ inputs.pr }}
+
+  pdl:
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    uses: bjhargrave/granite-cookbook-utils/.github/workflows/test_notebook.yaml@pr-support
+    #uses: ibm-granite-community/utils/.github/workflows/test_notebook.yaml@main
+    secrets: inherit
+    with:
+      notebook-lists: |
+        .github/notebook_lists/pdl_notebooks.txt
+      python-versions: >-
+        3.11
+      pr: ${{ inputs.pr }}

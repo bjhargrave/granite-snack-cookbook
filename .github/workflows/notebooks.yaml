@@ -35,6 +35,8 @@ permissions:
 
 jobs:
   vanilla:
+    permissions:
+      contents: read
     uses: ibm-granite-community/utils/.github/workflows/test_notebook.yaml@main
     secrets: inherit
     with:
@@ -45,6 +47,8 @@ jobs:
         3.11
 
   pdl:
+    permissions:
+      contents: read
     uses: ibm-granite-community/utils/.github/workflows/test_notebook.yaml@main
     secrets: inherit
     with:
