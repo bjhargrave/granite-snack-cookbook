@@ -1,27 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
-name: Testing Notebooks
+name: Test a Pull Request
 
 on:
-  schedule: # Test all notebooks daily
-  - cron: '0 10 * * *'
-  workflow_dispatch: # Test all notebooks on demand
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/notebooks.yaml' # This workflow
-      - '.github/workflows/test_notebook.yaml' # Called workflow
-      - '.github/notebook_lists/*' # Notebook lists
-      - 'recipes/**/*.ipynb'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/notebooks.yaml' # This workflow
-      - '.github/workflows/test_notebook.yaml' # Called workflow
-      - '.github/notebook_lists/*' # Notebook lists
-      - 'recipes/**/*.ipynb'
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Pull Request number to test'
+        required: true
+        type: number
 
 env:
   LC_ALL: en_US.UTF-8
@@ -46,6 +33,7 @@ jobs:
       python-versions: >-
         3.10
         3.11
+      pr: ${{ inputs.pr }}
 
   pdl:
     permissions:
@@ -58,3 +46,4 @@ jobs:
         .github/notebook_lists/pdl_notebooks.txt
       python-versions: >-
         3.11
+      pr: ${{ inputs.pr }}
